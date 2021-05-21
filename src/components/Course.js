@@ -8,7 +8,8 @@ const Course = (props) =>
 
     return(
 
-<div>
+
+    <div>
    <Header course = {course.name}/>
    <Content parts = {course.parts}/>
    <Total exercises={course.parts.map(x => x['exercises'])} />
