@@ -6,17 +6,26 @@ const App = () => {
   ]) 
   const [ newName, setNewName ] = useState('')
 
+  const People = persons.map(person =>{
+    return person.name})
+
   const addPerson = (event)=> {
     event.preventDefault()
-
+    if(People.includes(newName))
+    {
+      alert(`${newName} is already added to phonebook`)
+    }
+    else{
     const p = {
       name: newName
     }
     setPersons(persons.concat(p))
     setNewName('')
   }
+}
+
   const handleNoteChange = (event) => {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     setNewName(event.target.value)
   }
 
