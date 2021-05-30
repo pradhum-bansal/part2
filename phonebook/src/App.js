@@ -38,7 +38,7 @@ useEffect(() => {
 
   const handleNoteChange = (event) => {
     // console.log(event.target.value)
-    setNewName(event.target.value)
+    setNewName(event.target.value)  
   }
   const handleNumberChange = (event) => {
     // console.log(event.target.value)
