@@ -1,6 +1,6 @@
 import React from "react";
 
-const Single = ({ data: { name, capital, population, languages, flag } }) => {
+const Single = ({ data: { name, capital, population,languages,  flag } }) => {
   return (
     <>
       <h1>{name}</h1>
@@ -8,7 +8,7 @@ const Single = ({ data: { name, capital, population, languages, flag } }) => {
       <p>population {population}</p>
       <ul>
         {languages.map((language) => (
-          <li>{language.name}</li>
+          <li key={language.name}>{language.name}</li>
         ))}
       </ul>
       <img src={flag} alt={name} width="100px" />
