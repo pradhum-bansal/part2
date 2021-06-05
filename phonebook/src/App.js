@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Filter from './components/Filter'
+import contactservices from './services/persons'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Person'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -27,19 +31,15 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     })
-    setPersons(persons.concat(p))
-    setNewName('')
-    setNewNumber('')
+    
   }
 }
 
 useEffect(() => {
   console.log('effect')
-  axios
-    .get('http://localhost:3001/persons')
+ contactservices.getAll()
     .then(response => {
-      console.log('promise fulfilled')
-      setPersons(response.data)
+      setPersons(response)
     })
 }, [])
 
@@ -56,43 +56,40 @@ useEffect(() => {
     setNameFilter(event.target.value)
   }
 
-
-  const Person = (props)=>
+  const handleClick=(event)=>
   {
-    return(
-      <li key = {props.name}>{props.name} {props.number}</li>
-    )
+    const id = parseInt(event.target.dataset.id);
+    const person = persons.find(p => p.id===id)
+   const confirm = window.confirm(`Delete ${person.name}?`)
+    if(confirm) deletePerson(id)
   }
+ 
 
-  
+  const deletePerson = ( id ) => {
+    contactservices.deletePerson(id)
+    .finally(()=> setPersons(persons.filter(p=> p.id !== id)))
+  }
   const filtered = persons.filter(person => {
     return (
       person.name.toLocaleLowerCase().includes(nameFilter.toLocaleLowerCase())
     )
   })
+
   return (
     <div>
       <h2>Phonebook</h2>
-        <div>
-          filter shown with <input onChange={event=>handleNameFilter(event)} value ={nameFilter}/>
-        </div>
+        <Filter handleFilterChange = {event => handleNameFilter(event)} value = {nameFilter}/>
     
       <h2>Add a new</h2>
-      <form  onSubmit = {event => addPerson(event)}>
-        <div>
-          name: <input onChange={event =>handleNoteChange(event)}value = {newName} />
-        </div>
-        <div>
-          number: <input onChange={event =>handleNumberChange(event)}value = {newNumber}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+      nameValue = {newName}
+      numberValue = {newNumber}
+      handleSubmit = {event => addPerson(event)}
+      handleNoteChange = {event => handleNoteChange(event)}
+      handleNumberChange = {event => handleNumberChange(event)}
+      />
       <h2>Numbers</h2>
-      <ul>
-        {filtered.map(person => <Person key= {person.name} name = {person.name} number = {person.number} />)}
-      </ul>
+      <Persons persons = {filtered}  handleClick = {event => handleClick(event)}/>
     </div>
   )
 }
