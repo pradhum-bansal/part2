@@ -3,13 +3,15 @@ import Filter from './components/Filter'
 import contactservices from './services/persons'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Person'
-
+import './index.css'
+import Notification from './components/Notification'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
-  const [nameFilter, setNameFilter] = useState('');
+  const [nameFilter, setNameFilter] = useState('')
+  const [message,setMessage] = useState('message')
   const People = persons.map(person =>{
     return person.name})
 
@@ -38,12 +40,22 @@ const App = () => {
    contactservices.create(p)
     .then(response => {
       setPersons(persons.concat(response))
+
+      setMessage(
+        `contact ${p.name} added successfully`
+      )
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+
       setNewName('')
       setNewNumber('')
+      
     })
     
   }
 }
+
 
 useEffect(() => {
   console.log('effect')
@@ -88,13 +100,15 @@ useEffect(() => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+     
         <Filter handleFilterChange = {event => handleNameFilter(event)} value = {nameFilter}/>
-    
+        <Notification message = {message}/>
       <h2>Add a new</h2>
       <PersonForm
       nameValue = {newName}
       numberValue = {newNumber}
-      handleSubmit = {event => addPerson(event)}
+      handleSubmit = {event => addPerson(event)} 
       handleNoteChange = {event => handleNoteChange(event)}
       handleNumberChange = {event => handleNumberChange(event)}
       />
