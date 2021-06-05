@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import contactservices from './services/persons'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Person'
+
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -17,17 +17,27 @@ const App = () => {
     event.preventDefault()
     if(People.includes(newName))
     {
-      alert(`${newName} is already added to phonebook`)
+     if( window.confirm( `${newName} is alrady added to the phonebook, ` +
+      "replace the old number with a new one?"))
+      {
+        const people = persons.find(p=>p.name === newName)
+        const id = people.id
+        const newPerson = {...people, number: newNumber}
+        contactservices.update(id,newPerson).then(returnedPerson => {
+          setPersons(persons.map(p => (p.id !== id ? p : returnedPerson)));
+          return true;
+        })
+      }
     }
+    
     else{
     const p = {
       name: newName,
       number: newNumber
     }
-    axios
-    .post('http://localhost:3001/persons', p)
+   contactservices.create(p)
     .then(response => {
-      setPersons(persons.concat(response.data))
+      setPersons(persons.concat(response))
       setNewName('')
       setNewNumber('')
     })
