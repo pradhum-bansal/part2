@@ -17,7 +17,8 @@ const App = () => {
 
   const addPerson = (event)=> {
     event.preventDefault()
-    if(People.includes(newName))
+    
+   if(People.includes(newName))
     {
      if( window.confirm( `${newName} is alrady added to the phonebook, ` +
       "replace the old number with a new one?"))
@@ -61,7 +62,7 @@ useEffect(() => {
   console.log('effect')
  contactservices.getAll()
     .then(response => {
-      setPersons(response)
+      setPersons(response.data)
     })
 }, [])
 
@@ -80,7 +81,7 @@ useEffect(() => {
 
   const handleClick=(event)=>
   {
-    const id = parseInt(event.target.dataset.id);
+    const id = (event.target.dataset.id);
     const person = persons.find(p => p.id===id)
    const confirm = window.confirm(`Delete ${person.name}?`)
     if(confirm) deletePerson(id)
