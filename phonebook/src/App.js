@@ -20,7 +20,7 @@ const App = () => {
     
    if(People.includes(newName))
     {
-     if( window.confirm( `${newName} is alrady added to the phonebook, ` +
+     if( window.confirm( `${newName} is already added to the phonebook, ` +
       "replace the old number with a new one?"))
       {
         const people = persons.find(p=>p.name === newName)
@@ -52,6 +52,11 @@ const App = () => {
       setNewName('')
       setNewNumber('')
       
+      
+    })
+
+    .catch((error) => {
+      setMessage("number or name must be greater")
     })
     
     
